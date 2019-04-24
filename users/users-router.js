@@ -5,6 +5,10 @@ const router = express.Router();
 /// import database
 const db = require("../data/helpers/userDb");
 ///setup GET functions
+function upperCase(req, res, next) {
+  req.body.name = req.body.name.toUpperCase();
+  next();
+}
 router.get("/", (req, res) => {
   db.get()
     .then(users => {
@@ -55,7 +59,7 @@ router.get("/user-posts/:id", (req, res) => {
     });
 });
 ///setup POST functions
-router.post("/", (req, res) => {
+router.post("/", upperCase, (req, res) => {
   const userObj = req.body;
   console.log(userObj);
   if (!userObj.name) {
@@ -74,7 +78,7 @@ router.post("/", (req, res) => {
   }
 });
 ///setup PUT function
-router.put("/:id", (req, res) => {
+router.put("/:id", upperCase, (req, res) => {
   const id = Number(req.params.id);
   const userObj = req.body;
   if (!userObj.name) {
